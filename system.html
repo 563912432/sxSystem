@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>系统详情</title>
+  <link type="text/css" href="css/common.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app" style="width: 100%;height: 100%;overflow: hidden">
+  <iframe
+      id="system"
+      ref="system"
+      :src="url"
+      frameborder="0"
+      style="width: 100%;height: 100%"
+      @load="iframeDialogOpened()">
+  </iframe>
+  <div v-show="showCard" class="prop">
+    <div class="tip">
+      <div class="top">
+        <div class="left">
+          <div class="title" :class="mode === 1 ? 'active': ''" @click="mode = 1">
+            企业基本信息
+          </div>
+          <div class="title" :class="mode === 2 ? 'active': ''" @click="mode = 2">
+            日常业务
+          </div>
+        </div>
+        <div class="right">
+          <i class="el-icon-close" style="font-size: 18px;margin-right: 5px;color: #fff;cursor: pointer"
+             @click="showCard = false"></i>
+        </div>
+      </div>
+      <el-scrollbar class="scroll-wrapper">
+        <div class="content">
+          <div v-if="mode === 1" style="padding: 15px">
+            <dl v-if="companyInfo">
+              <dd><span class="label">企业名称： </span> <span>{{ companyInfo.company_title }}</span></dd>
+              <dd><span class="label">纳税人识别号： </span> <span>{{ companyInfo.tax_id }}</span></dd>
+              <dd><span class="label">纳税类型： </span> <span>{{ companyInfo.tax_type === 1 ? '一般纳税人' : '小规模纳税人' }}</span>
+              </dd>
+              <dd><span class="label">会计制度： </span> <span>{{ companyInfo.tax_system }}</span>
+              </dd>
+              <dd><span class="label">公司注册地址： </span> <span>{{ companyInfo.register_address }}</span></dd>
+              <dd><span class="label">注册资金(单位/元)： </span> <span>{{ companyInfo.register_money }}</span></dd>
+              <dd><span class="label">开户银行： </span> <span>{{ companyInfo.bank_account_name }}</span></dd>
+              <dd><span class="label">银行账号： </span> <span>{{ companyInfo.bank_id }}</span></dd>
+              <dd><span class="label">法人： </span> <span>{{ companyInfo.legal_person }}</span></dd>
+              <dd><span class="label">法人身份账号： </span> <span>{{ companyInfo.legal_person_id }}</span></dd>
+              <dd><span class="label">法人电话： </span> <span>{{ companyInfo.legal_person_tel }}</span></dd>
+            </dl>
+          </div>
+          <div v-else>
+            <div class="content-parent">
+              <div class="content-title">
+                <el-radio-group v-model="page" size="mini">
+                  <el-radio-button :label="1">当前业务</el-radio-button>
+                  <el-radio-button :label="2">全部业务</el-radio-button>
+                </el-radio-group>
+              </div>
+              <div class="content-content">
+                <div v-show="+page === 1">
+                  <div class="sx_title">{{ businessList[system][currentIndex]['title'] }}</div>
+                  <div class="sx_desc" v-html="businessList[system][currentIndex]['desc']"></div>
+                </div>
+                <div v-show="+page === 2">
+                  <el-table
+                      ref="table"
+                      :data="businessList[system]"
+                      highlight-current-row
+                      size="mini"
+                      style="width: 100%"
+                      @row-click="handleRowClick"
+                  >
+                    <el-table-column prop="title" label="实训任务"></el-table-column>
+                  </el-table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </el-scrollbar>
+      <div class="bottom">
+        <el-button size="mini" type="text" @click="prev"><i class="el-icon-arrow-left"></i> 上一题</el-button>
+        <el-button size="mini" type="danger" @click="exit">退出系统</el-button>
+        <el-button size="mini" type="text" @click="next">下一题 <i class="el-icon-arrow-right"></i></el-button>
+      </div>
+    </div>
+  </div>
+  <el-button v-show="!showCard" id="expandCard" type="primary" @click="showCard = true">
+    <i class="el-icon-full-screen"></i> 展开题板
+  </el-button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+  let app = new Vue({
+    el: '#app',
+    data: {
+      system: '',
+      url: '',
+      showCard: true,
+      mode: 1,
+      page: 1,
+      currentIndex: 0,
+      companyInfo: {
+        id: 1,
+        company_title: '山东问云机械有限公司',
+        tax_id: '91370305755666003U',
+        tax_system: '2007 企业会计准则',
+        tax_type: '普通纳税人',
+        industry: '工业',
+        legal_person: '崔恩赫',
+        legal_person_id: '370303200010111122',
+        legal_person_tel: '15275000001',
+        register_address: '山东省淄博市张店区德胜路85号',
+        register_money: '100000000',
+        register_date: '2020-10-01',
+        bank_account_name: '建设银行德胜支行',
+        bank_id: '621700166000758262',
+        month: '2020-11',
+        current_role_type: '会计',
+        current_user: '管理员',
+        current_user_tel: '15100000001'
+      },
+      businessList: {
+        tax: [
+          {title: '一、系统登录', desc: '进入登录界面输入账号：91370305755666003U 登录密码：123456'},
+          {title: '二、资产负债表的申报', desc: '<img src="./images/gs1.png" alt="">'},
+          {title: '三、利润表的申报', desc: '<img src="./images/gs2.png" alt="">'},
+          {title: '四、财务报表确认申报', desc: '对已经填报完成并审核数据无误的财务报表进行确认申报。'},
+          {title: '五、进项发票资料', desc: '<img src="./images/gs3.png" alt="">序号1：发票代码：3700171130   发票号码：32544580    开票日期：2019-12-4销方名称：淄博天成塑业有限公司金额：120000.00        税额：15600.0 认证方式：扫描认证     确认/认证日期：2019.12.11发票类型：增值税专票   发票状态：正常 序号2：发票代码：3700171130   发票号码：35650560    开票日期：2019-12-5销方名称：济南百全管材制造有限公司金额：121900.00税额：15847.00认证方式：扫描认证     确认/认证日期：2019.12.28发票类型：增值税专票   发票状态：正常 序号3：火车票抵扣：姓名：石坚强        金额：165.14     税额：14.86  180/{（1+9%）*9%}认证方式：勾选认证     确认/认证日期：2019.12.28发票类型：增值税专票   发票状态：正常 序号4：发票代码：3700171130   发票号码：56898754    开票日期：2019-12-8销方名称：淄博振华物流有限公司 金额：1000.00          税额：90.00认证方式：勾选认证     确认/认证日期：2019.12.28发票类型：增值税专票   发票状态：正常'},
+          {title: '六、销项发票资料', desc: '<img src="./images/gs4.png" alt=""><img src="./images/gs5.png" alt="">'},
+        ],
+        pt: [
+          {title: '一、人员信息采集，报送及获取反馈。', desc: '姓名：周欣桐  性别：女身份证号码：210101198007292948 联系方式：15953345928  人员状态：正常任职受雇从业类型：雇员  任职受雇从业日期：2019-03-01姓名：宫韬  性别：男身份证号码：371601199009289736 联系方式：15953312564 人员状态：正常任职受雇从业类型：雇员   任职受雇从业日期：2019-06-01 姓名：陈丽 性别：女身份证号码：370303199001055722联系方式：18553351661任职受雇从业类型：其他   任职受雇从业日期：2020-03-01'},
+          {title: '二、子女教育支出，报送及获取反馈。', desc: '<img src="./images/pt1.png" alt="">'},
+          {title: '三、继续教育支出，报送及获取反馈。', desc: '<img src="./images/pt2.png" alt="">'},
+          {title: '四、住房贷款信息支出，报送及获取反馈。', desc: '<img src="./images/pt3.png" alt="">'},
+          {title: '五、住房租金支出，报送及获取反馈。', desc: '<img src="./images/pt4.png" alt="">'},
+          {title: '六、赡养老人支出，报送及获取反馈。', desc: '<img src="./images/pt5.png" alt="">'},
+          {title: '七、正常工资薪金报表填写', desc: '<img src="./images/pt6.png" alt="">'},
+          {title: '八、全年一次性奖金收入填写', desc: '<img src="./images/pt7.png" alt="">'},
+          {title: '九、劳务报酬报表填写', desc: '<img src="./images/pt8.png" alt="">'},
+          {title: '十、税款计算', desc: '对个人工资、薪金进行查看核对。'},
+          {title: '十一、申报表报送', desc: '勾选扣缴所得税报告表进行报送，报送成功后获取反馈。'},
+          {title: '十二、税款缴纳', desc: '勾选扣款项目，点击立即缴款，缴款成功后获取缴纳反馈。'},
+        ],
+        kp: [
+          { title: '一、系统登录', desc: '登录密码123456 证书密码12345678公司名称：山东问云机械有限公司纳税人识别号：91370305755666003U地址、电话：山东省淄博市张店区德胜路85号 0533-3918359开户行及账号：中国建设银行德胜路支行 5159889499889556新增开票人员：刘伟霞将开票人员刘伟霞的密码设置为6个0' },
+          { title: '二、增加客户信息', desc: '资料一 税号：91325685120003654U地址电话：浙江省义乌市义乌国际批发市场 5789800银行账号：中国银行义乌支行 58600552223001240资料二客户名称：济南速优贸易有限公司税号：91310306773173923U地址电话：山东省济南市历下区青年路59号 6895723银行账号：中国农业银行历下区支行65240552223058450' },
+          { title: '三、增加商品信息', desc: '<img src="./images/kp1.png" />' },
+          { title: '四、发票读入', desc: '从金税设备中读入新购买的发票信息，10份增值税普通发票（票号05684500一05684509）和25份增值税专用发票（票号03279189一03279213），在开票系统中操作“发票读入”。' },
+          { title: '五、库存查询', desc: '核对库存发票的相关信息，查询系统中未开具发票份数及发票号码。{10份增值税普通发票（票号05684500一05684509）和25份增值税专用发票（票号03279189一03279213）}' }
+        ],
+        cc: [
+          { title: '一 系统登录', desc: '证书密码：12345678' },
+          { title: '二 查询发票', desc: '查询本期及前期未勾选的所有发票' },
+          { title: '三 对所有发票明细信息进行查询', desc: '会计刘伟霞对所有发票的发票明细信息进行查询，确认有无异常情况。' },
+          { title: '四 发票抵扣勾选', desc: '会计刘伟霞根据本月近期的销项情况，对本月收到的第1-3张进项税发票进行了勾选，第1张和第3张全额进行抵扣，第2张发票抵扣部分税额12000元，剩余税额3847元自动构成不抵扣，无需在“发票不抵扣勾选”界面勾选。' },
+          { title: '五 发票抵扣勾选', desc: '会计刘伟霞根据本月近期的销项情况，对本月收到的第4、5张进项税发票进行了勾选操作。' },
+        ],
+        shB: [
+          { title: '新增劳动用工备案', desc: '新增劳动用工备案' },
+          { title: '修改劳动用工备案', desc: '修改劳动用工备案' },
+          { title: '删除劳动用工备案', desc: '删除劳动用工备案' },
+          { title: '合同续签', desc: '合同续签' },
+          { title: '合同解除', desc: '合同解除' },
+          { title: '保险在职增员', desc: '保险在职增员' },
+          { title: '保险在职减员', desc: '保险在职减员' },
+        ],
+        ccb: [
+          { title: '一、同城异行转账', desc: '12月07日，公司需要给淄博天成塑业有限公司支付一笔货款，请根据付款申请书，进行网上银行操作。（出纳制单，主管审核） 付款信息：收款单位：淄博天成塑业有限公司付款理由：塑料颗粒开户银行：中国工商银行淄川分行银行账号：6358626565842地址电话：山东省淄博市淄川区建成路98号  0533-5139311付款金额：135600.00' },
+          { title: '二、同城异行转账', desc: '12月08日，公司需要给淄博振华物流有限公司支付一笔运输费，请根据付款申请书，进行网上银行操作。（出纳制单，主管审核） 付款信息：收款单位：淄博振华物流有限公司付款理由：运输费开户银行：中国建设银行联通路支行银行账号：5159889499885869地址电话：淄博市张店区联通路58号  0533-3918256付款金额：1090.00' },
+          { title: '三、异城异行转账', desc: '12月10日，公司需要给郑州聚鑫五金商贸有限公司支付一笔货款，请根据付款申请书，进行网上银行操作。（出纳制单，主管审核）付款信息：收款单位：郑州聚鑫五金商贸有限公司付款理由：货款——棉头开户银行：中国农业银行金水支行银行账号：6265840747895地址电话：河南省郑州市金水区80号  0371-5789811付款金额：16950.00' },
+          { title: '四、存款查询', desc: '12月11日，出纳将公司收到一笔现金货款5000元存入银行，存款成功后登录网银操作系统，查询该笔款项是否入账。' },
+          { title: '五、转账交易查询', desc: '12月11日，采购员找出纳帮忙查询本月支付给淄博天成塑业有限公司的那笔货款金额是多少。' }
+        ],
+        abc: [
+          { title: '一、同城同行转账', desc: '12月08日，公司需要给山东飞虎快运有限公司支付一笔快递费，请根据付款申请书，进行网上银行操作。（操作员1制单，操作员2审核） 付款信息：收款单位：山东飞虎快运有限公司付款理由：快递费开户银行：农行高新区支行银行账号：62217968222686194521地址电话：高新区重庆路138号  0533-2741256付款金额：600.00' },
+          { title: '二、异地同行转账', desc: '12月08日，公司需要给济南百全管材制造有限公司支付一笔货款，请根据付款申请书，进行网上银行操作。（操作员1制单，操作员2审核）付款信息：收款单位：济南百全管材制造有限公司付款理由：货款开户银行：中国农业银行长清分行银行账号：785682326584074600地址电话：山东省济南市长青市五羊路908号  0531-87236610付款金额：100000.00' },
+          { title: '三、存款查询', desc: '12月11日，出纳将公司收到一笔5万元现金货款后存入银行，存款成功后登录网银操作系统，查询该笔款项是否入账。' },
+          { title: '四、转账交易查询', desc: '12月12日，采购员找出纳帮忙查询本月支付给济南百全管材制造有限公司的那笔10万元货款是什么时间。' },
+          { title: '五、同城异行转账（新增）', desc: '12月14日，公司需要给新联系的供货商山东永润商贸有限公司支付一笔货款，请根据付款申请书，进行网上银行操作。（操作员1制单，操作员2审核）付款信息：收款单位：山东永润商贸有限公司付款理由：包装箱开户银行：中国工商银行开发区支行银行账号：163584463756587地址电话：山东省淄博市开发区双赢路85号  0533-3787557付款金额：7458.00' },
+        ],
+        sgz: [
+          { title: '一、填制记账凭证', desc: '12月3日，销售货物一批，款项未收，开具增值税专用发票。' },
+          { title: '二、填制T型账', desc: '' },
+          { title: '三、填制科目汇总表', desc: '' },
+          { title: '四、填制日记账', desc: '' },
+          { title: '五、填制明细分类账', desc: '' }
+        ],
+        cnSgz: [
+          { title: '一、填制记账凭证', desc: '12月3日，销售货物一批，款项未收，开具增值税专用发票。' },
+          { title: '二、填制现金日记账', desc: '12月3日，销售货物一批，款项未收，开具增值税专用发票。' },
+          { title: '三、填制银行存款日记账', desc: '12月3日，销售货物一批，款项未收，开具增值税专用发票。' },
+          { title: '四、填制备查簿', desc: '12月3日，销售货物一批，款项未收，开具增值税专用发票。' },
+          { title: '五、账实核对', desc: '库存现金账实核对' },
+        ],
+        info: [
+          { title: '一、企业基本信息填写', desc: '填写企业基本信息' },
+          { title: '二、股东及出资信息填写', desc: '填写股东及出资信息' },
+          { title: '三、资产状况信息填写', desc: '填写资产状况信息' },
+          { title: '四、党建信息填写', desc: '填写党建信息' },
+          { title: '五、团建信息填写', desc: '填写团建信息' },
+          { title: '六、社保信息填写', desc: '填写社保信息' },
+          { title: '七、特种设备信息填写', desc: '填写特种设备信息' }
+        ]
+      }
+    },
+    created: function () {
+      let param = location.search.substr(location.search.lastIndexOf('=') + 1)
+      this.system = param
+      switch (param) {
+        case 'tax':
+          this.url = 'tax/index.html'
+          break
+        case 'pt':
+          this.url = 'personal_tax/index.html'
+          break
+        case 'kp':
+          this.url = 'kaipiao/index.html'
+          break
+        case 'cc':
+          this.url = 'renzheng/index.html'
+          break
+        case 'shB':
+          this.url = 'shebao/index.html'
+          break
+        case 'ccb':
+          this.url = 'jian_hang/index.html'
+          break
+        case 'abc':
+          this.url = 'nong_hang/index.html'
+          break
+        case 'sgz':
+          this.url = 'kjsgz/index.html'
+          break
+        case 'cnSgz':
+          this.url = 'cnsgz/index.html'
+          break
+        case 'info':
+          this.url = 'gsnb/index.html'
+          break
+        default:
+          break
+      }
+    },
+    methods: {
+      iframeDialogOpened: function (system_tag) {
+        this.sendMessageToSystem('preset', this.companyInfo)
+        if (this.system === 'cc') {
+          this.sendMessageToSystem('presetInvoice', [
+            { code: '3700171130', number: '32544580', create_time: '2019/12/4', tax_money: '15600', declare_tax_money: '15600', saler_name: '淄博天成塑业有限公司', saler_tax_no: '91370305755362038U', money: '120000', purpose: '抵扣' },
+            { code: '3700171130', number: '35650560', create_time: '2019/12/5', tax_money: '15847', declare_tax_money: '15847', saler_name: '济南百全管材制造有限公司', saler_tax_no: '91370302377683301U', money: '121900', purpose: '抵扣' },
+            { code: '3700171130', number: '56898754', create_time: '2019/12/5', tax_money: '90', declare_tax_money: '90', saler_name: '淄博振华物流有限公司', saler_tax_no: '91370302377683301U', money: '1000', purpose: '抵扣' },
+            { code: '3700171130', number: '151264', create_time: '2019/12/8', tax_money: '6051.33', declare_tax_money: '6051.33', saler_name: '淄博明珠旗瑞汽车销售有限公司', saler_tax_no: '91370303661976381U', money: '46548.67', purpose: '抵扣' },
+            { code: '3700171130', number: '35895789', create_time: '2019/12/9', tax_money: '881.45', declare_tax_money: '881.45', saler_name: '中国石油天然气股份有限公司山东淄博销售分公司', saler_tax_no: '91370303731731255U', money: '6780.4', purpose: '抵扣' }
+          ])
+        }
+      },
+      sendMessageToSystem: function (cmd, params) {
+        this.$refs['system'].contentWindow.postMessage({cmd, params}, '*')
+      },
+      prev() {
+        if (!this.system) {
+          this.$message.warning('请等待系统加载完毕后再进行操作')
+          return false
+        }
+        if (this.currentIndex > 0) {
+          this.currentIndex--
+        } else {
+          this.$message({
+            type: 'warning',
+            message: '已经是第一题了'
+          })
+        }
+      },
+      next() {
+        if (!this.system) {
+          this.$message.warning('请等待系统加载完毕后再进行操作')
+          return false
+        }
+        if (this.currentIndex + 1 < this.businessList[this.system].length) {
+          this.currentIndex++
+        } else {
+          this.$message({
+            type: 'warning',
+            message: '已经是最后一题了'
+          })
+        }
+      },
+      exit() {
+        location.href = 'toolbox.html'
+      },
+      handleRowClick: function (row) {
+        this.currentIndex = this.businessList[this.system].indexOf(row)
+        this.page = 1
+      },
+    }
+  })
+</script>
+<style>
+  .scroll-wrapper {
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  .el-scrollbar__wrap {
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  #expandCard {
+    z-index: 10001;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .prop {
+    z-index: 10001;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 400px;
+    height: 530px;
+    background-color: #ffffff;
+    box-shadow: 1px 1px 10px 3px rgba(20, 20, 20, 0.6);
+  }
+
+  .tip {
+    background-color: #ffffff;
+    line-height: 20px;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  .top {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #409EFF;
+    border-bottom: solid 1px #e8e8e8;
+  }
+
+  .left {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    padding-left: 0px;
+  }
+
+  .title {
+    font-size: 13px;
+    height: 100%;
+    line-height: 40px;
+    border-left: none;
+    border-bottom: none;
+    width: 100px;
+    cursor: pointer;
+  }
+
+  .active {
+    background-color: #ffffff;
+    color: #666666;
+  }
+
+  .right {
+    color: #606266;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content {
+    text-align: left;
+    font-size: 14px;
+    color: #606266;
+    flex: 1;
+  }
+
+  dl {
+    padding: 0;
+    margin: 0;
+  }
+
+  dd {
+    padding: 0;
+    margin: 0;
+    height: 30px;
+  }
+
+  .label {
+    display: inline-block;
+    width: 130px;
+    color: #606266;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .content-parent {
+    margin: 0 15px 10px;
+  }
+
+  .content-title {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .icon-parent {
+    border: solid 1px #EFEFEF;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  .content-content {
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .sx_title {
+    font-weight: bold;
+  }
+
+  .sx_desc {
+    margin-top: 10px;
+  }
+
+  .bottom {
+    height: 40px;
+    border-top: solid 1px #EBEEF5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+  }
+</style>
+</body>
+</html>

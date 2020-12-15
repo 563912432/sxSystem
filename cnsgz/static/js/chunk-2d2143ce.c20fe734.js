@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d2143ce"],{afa4:function(n,e,c){"use strict";c.r(e);var t=function(){var n=this,e=n.$createElement,c=n._self._c||e;return c("div",[n._v(" 404 我是错误页面 ")])},a=[],u=c("9ca4"),l={},r=Object(u["a"])(l,t,a,!1,null,null,null);e["default"]=r.exports}}]);
+//# sourceMappingURL=chunk-2d2143ce.c20fe734.js.map

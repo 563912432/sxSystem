@@ -1,0 +1,39 @@
+.mb-5{
+    margin-bottom: 5px;
+}
+.mr-5{
+    margin-right: 5px;
+}
+.mr-10{
+    margin-right: 10px;
+}
+.ml-5{
+    margin-left: 5px;
+}
+.mt-5{
+    margin-top: 5px;
+}
+.mt-10{
+    margin-top: 10px;
+}
+.mt-15{
+    margin-top: 15px;
+}
+.mt-20{
+    margin-top: 20px;
+}
+.mb-5{
+    margin-bottom: 5px;
+}
+.mb-10{
+    margin-bottom: 10px;
+}
+.float-right{
+    float: right;
+}
+.float-left{
+    float: left;
+}
+.text-center{
+    text-align: center;
+}

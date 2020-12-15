@@ -1,0 +1,94 @@
+.mb-5 {
+    margin-bottom: 5px;
+  }
+  .mr-5 {
+    margin-right: 5px;
+  }
+  .mr-10 {
+    margin-right: 10px;
+  }
+  .ml-5 {
+    margin-left: 5px;
+  }
+  .mt-5 {
+    margin-top: 5px;
+  }
+  .mt-10 {
+    margin-top: 10px;
+  }
+  .mt-15 {
+    margin-top: 15px;
+  }
+  .mt-20 {
+    margin-top: 20px;
+  }
+  .mb-5 {
+    margin-bottom: 5px;
+  }
+  .mb-10 {
+    margin-bottom: 10px;
+  }
+  .mh-5 {
+    margin: 0 5px
+  }
+  .float-right {
+    float: right;
+  }
+  .float-left {
+    float: left;
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-right {
+    text-align: right !important;
+  }
+  .material {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    overflow: auto;
+}
+a {
+  /* color: #40ADDC; */
+  color: #0066CC;
+  font-size: 13px;
+  font-weight: 400;
+}
+.company-top{
+  display: flex;
+  justify-content: flex-end
+}
+.company-info {
+height: 40px;
+line-height: 30px;
+border: 1px solid #dee2e6;
+border-bottom: 0px;
+}
+
+.company-info .justify-content-between {
+padding-left: 15px;
+height: 100%;
+display: flex;
+justify-content: space-between;
+}
+
+.company-info .company-title {
+line-height: 40px;
+margin-left: 3px;
+}
+
+.company-info .company-operating {
+width: 250px;
+line-height: 40px;
+float: right;
+}
+Textarea{
+  width: 100%;
+  padding:4px 7px;
+  height:50px;
+}
+/* div{
+  text-align: start
+}
+   */

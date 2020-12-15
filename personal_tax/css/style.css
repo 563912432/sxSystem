@@ -1,0 +1,107 @@
+.content-top-text-blue {
+    float: left;
+    width: 4px;
+    height: 20px;
+    background-color: #4285F4;
+    border-radius: 5px;
+    margin: 10px 10px 10px 0;
+}
+.f-14 {
+    font-size: 14px;
+}
+.ml-50 {
+    margin-left: 50px;
+}
+.mr-20 {
+    margin-right: 20px;
+}
+.text-notice{
+    font-size: 13px;
+}
+.el-table{
+    font-size: 12px;
+}
+.btn-right{
+    position:relative;
+    left:720px;
+}
+.text-red {
+    color: #FBBB7C !important;
+}
+.text-red input{
+    color: #FBBB7C !important;
+}
+.text-blue{
+    color: #0000FF
+}
+.title {
+    font-size: 16px;
+}
+.has-gutter th{
+    background-color: #F4F6F9;
+    height: 40px;
+    padding: 0px;
+    color: black;
+    font-weight: 400;
+  }
+  .has-gutter th .cell{
+      line-height: 20px;
+  }
+  .el-input__inner {
+    height: 30px;
+  }
+  .flex{
+      display: flex;
+  }
+  .line{
+    line-height:40px;
+    text-align:center;
+  }
+  .el-input__icon{
+      line-height: 30px;
+  }
+  .table-select{
+    width: 100%;
+    height: 35px;
+    border: solid #e0e0e0;
+    border-width: 1px 0px 1px 0px;
+    margin: 10px 5px;
+  }
+  .el-input__inner {
+    height: 30px;
+    padding: 0 5px
+  }
+  .btn-bottom {
+      margin: 3px 0 ;
+      text-align: center;
+      position: relative;
+      right: 8%
+  }
+  .el-form-item__content {
+      margin-bottom: 3px
+  }
+::-webkit-scrollbar-track {
+//-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: #F5F5F5;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track:hover {
+  background-color: rgb(229, 229, 229);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 10px;
+  background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgb(204, 204, 204);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 10px;
+  background-color: rgb(137, 137, 137);
+}

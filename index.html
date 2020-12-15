@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="expires" content="0">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!--<link rel="shortcut icon" href="/conf/images/favicon.ico">-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <!-- 默认360浏览器为极速模式 -->
+  <meta name="renderer" content="webkit">
+  <title>浪潮云会计实训系统</title>
+  <!-- 登录 独立样式 -->
+  <link type="text/css" href="css/common.css" rel="stylesheet"/>
+  <link type="text/css" href="css/login.css" rel="stylesheet"/>
+
+  <!--插件autocomplete.js-->
+  <link type="text/css" rel="stylesheet" href="plug-in/jQuery-Autocomplete-Plugin-1.2.3/jquery.autocomplete.css"/>
+  <!-- 在页面加载之前先加载，防止加载不过来导致按钮无法点击 -->
+  <script src="./js/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="title"></div>
+  <div class="login">
+    <ul class="tab_list">
+      <li class="tab_item tab_choose">账户密码登录</li>
+      <li class="tab_item">手机号登录</li>
+      <li class="tab_item">忘记密码</li>
+    </ul>
+    <div id="account" class="">
+      <div class="div_input">
+        <img src="./images/account.svg" />
+        <input placeholder="账户" class="account"/>
+      </div>
+      <div class="div_input">
+        <img src="./images/password.svg" />
+        <input placeholder="密码" type="password" class="password"/>
+      </div>
+      <button class="button_login" onclick="loginUser()">登&nbsp;&nbsp;录</button>
+    </div>
+    <div id="telephone" class="hide">
+      <div class="div_input">
+        <img src="./images/phone.svg" />
+        <input placeholder="手机号" class="account"/>
+      </div>
+      <div class="div_input">
+        <img src="./images/code.svg" />
+        <input placeholder="验证码" class="code" />
+        <div class="get_code" id="login_code">获取验证码</div>
+      </div>
+      <button class="button_login" onclick="loginUser()">登&nbsp;&nbsp;录</button>
+    </div>
+    <div id="forget" class="hide">
+      <div class="div_input">
+        <img src="./images/account.svg" />
+        <input placeholder="账户" class="account"/>
+      </div>
+      <div class="div_input">
+        <img src="./images/code.svg" />
+        <input placeholder="验证码" class="code" />
+        <div class="get_code" id="forget_code">获取验证码</div>
+      </div>
+      <div class="div_input">
+        <img src="./images/password.svg" />
+        <input placeholder="新密码" type="password" class="password"/>
+      </div>
+      <button class="button_login" onclick="loginUser()">保存并登录</button>
+    </div>
+
+
+  </div>
+  <img src="images/left_top.svg" style="position: absolute;top: 0;left: 5rem" />
+  <img src="images/left_bottom.svg" style="position: absolute;bottom: 3rem;left: 3rem" />
+  <img src="images/right_top.svg" style="position: absolute;top: 3rem;right: 3rem" />
+  <img src="images/right_bottom.svg" style="position: absolute;bottom: 0;right: 0" />
+</div>
+<!-- 第三方插件 -->
+<script type="text/javascript" src="plug-in/jQuery-Autocomplete-Plugin-1.2.3/jquery.autocomplete.min.js"></script>
+<!-- 公共方法 -->
+<script type="text/javascript" src="js/login.js"></script>
+<!-- 私有方法 -->
+<!--<script type="text/javascript" src="js/login_register.min.js"></script>-->
+</body>
+</html>
